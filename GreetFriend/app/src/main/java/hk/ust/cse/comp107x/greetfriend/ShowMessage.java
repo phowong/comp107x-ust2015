@@ -5,27 +5,29 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 
-public class MainActivity extends Activity implements View.OnClickListener {
+public class ShowMessage extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_show_message);
 
-        Button greetButton = (Button) findViewById(R.id.greetButton);
-        greetButton.setOnClickListener(this);
+        Intent in = getIntent();
+
+        String message = in.getStringExtra("message");
+
+        TextView textMessage = (TextView) findViewById(R.id.textMessage);
+
+        textMessage.setText(message);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_show_message, menu);
         return true;
     }
 
@@ -42,29 +44,5 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onClick(View v) {
-
-
-        EditText editFriendName = (EditText) findViewById(R.id.editFriendName);
-
-        String friendName = editFriendName.getText().toString();
-
-        switch (v.getId()){
-
-            case R.id.greetButton:
-
-                Intent in = new Intent(this,ShowMessage.class);
-
-                in.putExtra("message",getString(R.string.greetmessage) + friendName + "!");
-
-                startActivity(in);
-                break;
-
-            default:
-                break;
-        }
     }
 }
