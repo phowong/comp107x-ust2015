@@ -84,17 +84,63 @@ public class DrawView extends View {
         canvas.drawColor(Color.WHITE);     //if you want another background color
         // Draw the cannon
         // TODO
-
+        cannon.draw(canvas);
         // Draw all the bullets
         // TODO
+        for( int i = 0 ; i < bullets.size() ; i++){
+            Bullet b = bullets.get(i);
+            if (b != null){
+                b.draw(canvas);
 
+                if(!b.move()){
+                    bullets.remove(i);
+                }
+            }
+        }
         // Draw all the explosions, at those locations where the bullet
         // hits the Android Guy
         // TODO
+        for (int i = 0; i < explosions.size(); i++ ) {
+            if (explosions.get(i) != null) {
+                if (explosions.get(i).draw(canvas) == false) {
+                    explosions.remove(i);
+                }
+            }
+        }
 
-        // If the Android Guy is falling, check to see if any of the bullets
-        // hit the Guy. Draw the Android Guy
+
+
+
         // TODO
+        // my note there is only one Android Guy exists within the whole game.
+        // when Android Guy is hit, system checks to see if the explosion last for enough time and remove it.
+        if (androidGuy != null){
+            androidGuy.draw(canvas);
+            RectF guyRect = androidGuy.getRect();
+            // If the Android Guy is falling, check to see if any of the bullets
+            // hit the Guy. Draw the Android Guy
+            // TODO
+            for( int i = 0 ; i < bullets.size() ; i++){
+                // The rectangle surrounding the Guy and Bullet intersect, then it's a collision
+                // Generate an explosion at that location and delete the Guy and bullet. Generate
+                // a new Android Guy to fall from the top.
+                if (RectF.intersects(guyRect,bullets.get(i).getRect())){
+
+                    explosions.add(new Explosion(Color.RED,mContext,androidGuy.getX(),androidGuy.getY()));
+
+                    androidGuy.reset();
+                    bullets.remove(i);
+                    break;
+                }
+            }
+
+            if (androidGuy.move() == false){
+                androidGuy = null;
+            }
+
+        }
+
+
 
     }
 
